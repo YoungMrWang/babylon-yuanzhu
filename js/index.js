@@ -68,10 +68,10 @@ var buildPath = function (radius, iCardTexture, data) {
    var path1 = [];
    var path2 = [];
    var pi2 = 2 * Math.PI;
-   var angle = parseFloat((data.angle + width / 140 / length * pi2).toFixed(3)); // 该卡片所占用扇形的弧度
+   var angle = parseFloat((data.angle + width / 90 / length * pi2).toFixed(3)); // 该卡片所占用扇形的弧度
    for (var i = data.angle; i <= angle; i += 0.001) {
-      path1.push(new BABYLON.Vector3(Math.cos(i) * radius, height / 240 + data.y, Math.sin(i) * radius));
-      path2.push(new BABYLON.Vector3(Math.cos(i) * radius, -height / 240 + data.y, Math.sin(i) * radius));
+      path1.push(new BABYLON.Vector3(Math.cos(i) * radius, height / 150 + data.y, Math.sin(i) * radius));
+      path2.push(new BABYLON.Vector3(Math.cos(i) * radius, -height / 150 + data.y, Math.sin(i) * radius));
    }
    return [path1, path2];
 };
@@ -86,7 +86,7 @@ var buildCard = function (scene, radius, cards) {
       var iCardTexture = cards[index].texture._texture;
       var i = index;
       iCardTexture.onLoadedObservable.addOnce(function (ii, iTexture) {
-         var ribbon = BABYLON.Mesh.CreateRibbon(ii, buildPath(radius, iTexture, cards[ii]), false, false, 0, scene, false, BABYLON.Mesh.FRONTSIDE);
+         var ribbon = BABYLON.Mesh.CreateRibbon(ii, buildPath(radius, iTexture, cards[ii]), false, false, 0, scene, false, BABYLON.Mesh.DOUBLESIDE);
          ribbon.isPickable = true;
          ribbon.material = new BABYLON.StandardMaterial(ii, scene);
          ribbon.material.diffuseTexture = cards[ii].texture;
@@ -96,7 +96,7 @@ var buildCard = function (scene, radius, cards) {
 
 var buildBg = function (scene, radius) {
    var radius1 = radius - 0.2;
-   var texture = buildTexture(scene, "img/bg.jpg");
+   var texture = buildTexture(scene, "img/bg.png");
    var path1 = [];
    var path2 = [];
    var pi2 = 2 * Math.PI;
@@ -107,6 +107,7 @@ var buildBg = function (scene, radius) {
    var ribbon = BABYLON.Mesh.CreateRibbon("ribbon", [path1, path2], false, false, 0, scene, false, BABYLON.Mesh.FRONTSIDE);
    ribbon.isPickable = false;
    ribbon.material = new BABYLON.StandardMaterial("material", scene);
+   ribbon.alpha = 0.5
    ribbon.material.diffuseTexture = texture;
 };
 
